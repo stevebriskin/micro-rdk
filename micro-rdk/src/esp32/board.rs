@@ -349,6 +349,24 @@ impl Board for EspBoard {
         }
 
         unsafe {
+            // Turn off more components for hibernate mode, then call deep sleep
+            crate::esp32::esp_idf_svc::sys::esp_sleep_pd_config(
+                crate::esp32::esp_idf_svc::sys::esp_sleep_pd_domain_t_ESP_PD_DOMAIN_RTC_PERIPH,
+                crate::esp32::esp_idf_svc::sys::esp_sleep_pd_option_t_ESP_PD_OPTION_OFF,
+            );
+            crate::esp32::esp_idf_svc::sys::esp_sleep_pd_config(
+                crate::esp32::esp_idf_svc::sys::esp_sleep_pd_domain_t_ESP_PD_DOMAIN_RTC_SLOW_MEM,
+                crate::esp32::esp_idf_svc::sys::esp_sleep_pd_option_t_ESP_PD_OPTION_OFF,
+            );
+            crate::esp32::esp_idf_svc::sys::esp_sleep_pd_config(
+                crate::esp32::esp_idf_svc::sys::esp_sleep_pd_domain_t_ESP_PD_DOMAIN_RTC_FAST_MEM,
+                crate::esp32::esp_idf_svc::sys::esp_sleep_pd_option_t_ESP_PD_OPTION_OFF,
+            );
+            crate::esp32::esp_idf_svc::sys::esp_sleep_pd_config(
+                crate::esp32::esp_idf_svc::sys::esp_sleep_pd_domain_t_ESP_PD_DOMAIN_XTAL,
+                crate::esp32::esp_idf_svc::sys::esp_sleep_pd_option_t_ESP_PD_OPTION_OFF,
+            );
+
             crate::esp32::esp_idf_svc::sys::esp_deep_sleep_start();
         }
     }
